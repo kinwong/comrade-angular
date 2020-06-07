@@ -1,11 +1,19 @@
 import { Injectable } from '@angular/core';
 
+export type WriterConfig = {
+  logLevel?: LogSeverity
+}
+export type ConsoleWriterConfig = {
+};
+
+export type LogConfig = {
+  writers: WriterConfig[];
+};
+
 /**
  * Indicates level of log severity.
  */
 export enum LogSeverity {
-  /** Indicates the severity of the log is at the tracing level. */
-  Trace,
   /** Indicates the severity of the log is at the debug level. */
   Debug,
   /** Indicates the severity of the log is at the information level. */
@@ -13,9 +21,7 @@ export enum LogSeverity {
   /** Indicates the severity of the log is at the warning level. */
   Warn,
   /** Indicates the severity of the log is at the error level. */
-  Error,
-  /** Indicates the severity of the log is at the fatal level. */
-  Fatal,
+  Error
 }
 
 interface MessageFunc {
@@ -43,13 +49,8 @@ export abstract class Logger {
     message: string,
     ...args: object[]
   ): void;
-  /**
-   * Logs a fatal message
-   */
-  public fatal(message: string, error: Error): void {
-    this.log(LogSeverity.Fatal, error.message);
-  }
-  public error(error: Error): void {
+
+ public error(error: Error): void {
     if (!this.enabled(LogSeverity.Error)) {
       return;
     }
@@ -69,12 +70,6 @@ export abstract class Logger {
   }
   public debug(message: string): void {
     if (!this.enabled(LogSeverity.Debug)) {
-      return;
-    }
-    this.log(LogSeverity.Info, message);
-  }
-  public trace(message: string): void {
-    if (!this.enabled(LogSeverity.Trace)) {
       return;
     }
     this.log(LogSeverity.Info, message);
@@ -142,16 +137,6 @@ class ConsoleLogWriter implements LogWriter {
     ...optionalParams: any[]
   ): void {
     switch (severity) {
-      case LogSeverity.Trace:
-        // tslint:disable-next-line: no-console
-        console.trace(message, optionalParams);
-        break;
-
-      case LogSeverity.Debug:
-        // tslint:disable-next-line: no-console
-        console.debug(message, optionalParams);
-        break;
-
       case LogSeverity.Info:
         // tslint:disable-next-line: no-console
         console.info(message, optionalParams);
@@ -165,9 +150,11 @@ class ConsoleLogWriter implements LogWriter {
         console.error(message, optionalParams);
         break;
 
-      case LogSeverity.Fatal:
-        console.error(message, optionalParams);
-        break;
-    }
+      case LogSeverity.Debug:
+      default:
+      // tslint:disable-next-line: no-console
+      console.debug(message, optionalParams);
+      break;
+      }
   }
 }
