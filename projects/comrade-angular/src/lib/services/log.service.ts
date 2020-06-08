@@ -122,15 +122,21 @@ type LogWriter = {
     message: string,
     ...optionalParams: any[]
   ): void;
+  /**
+   * Clears the writer.
+   */
+  clear(): void;
 };
 
 /**
  * Logs to the browser console.
  */
 class ConsoleLogWriter implements LogWriter {
-  /**
-   * @inheritdoc
-   */
+  public static create(): ConsoleLogWriter {
+    return new ConsoleLogWriter();
+  }
+  private constructor() {}
+  /** @inheritdoc */
   public write(
     severity: LogSeverity,
     message: string,
@@ -155,6 +161,36 @@ class ConsoleLogWriter implements LogWriter {
       // tslint:disable-next-line: no-console
       console.debug(message, optionalParams);
       break;
-      }
+    }
+  }
+  /** @inheritdoc */
+  clear(): void {
+  }
+}
+
+/**
+ * Logs to a array or strings.
+ */
+class StringArrayLogWriter implements LogWriter {
+  private constructor() {}
+  public lines: string[] = [];
+
+  public static create(): StringArrayLogWriter {
+    return new StringArrayLogWriter();
+  }
+  /** @inheritdoc */
+  public write(severity: LogSeverity, message: string, ...optionalParams: any[]): void {
+    let line = '[' + LogSeverity[severity].toUpperCase() + ']';
+    if (!message) {
+      line += ' ' + message;
+    }
+    if (optionalParams && optionalParams.length > 0) {
+      line += ' ' + JSON.stringify(optionalParams);
+    }
+    this.lines.push(line);
+  }
+  /** @inheritdoc */
+  clear(): void {
+    this.lines = [];
   }
 }
