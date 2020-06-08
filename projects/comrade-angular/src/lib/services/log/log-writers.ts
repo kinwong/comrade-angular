@@ -10,9 +10,7 @@ export type LogWriterConfig = {
   minLevel?: LogSeverityName
 };
 
-/**
- * Represents the foundation of a log writer.
- */
+/** Represents the foundation of a log writer. */
 export abstract class LogWriter {
   protected readonly minLevel: LogSeverity;
 
@@ -105,4 +103,18 @@ class StringArrayLogWriter extends LogWriter {
   clear(): void {
     this.lines = [];
   }
+}
+
+/**
+ * Creates a log writer from the specified log writer name and configuration.
+ * @param configRow A tuple of log writer name and configuration.
+ */
+export function createLogWriter(
+  name: LogWriterName, config: LogWriterConfig): LogWriter {
+    switch (name) {
+      case 'console': return ConsoleLogWriter.create(config);
+      case 'string-array': return StringArrayLogWriter.create(config);
+      default:
+        throw Error(`Unable to create log-writer with name '${name}'.`);
+    }
 }

@@ -3,9 +3,7 @@ import { LogSeverity } from './types';
 import { LogWriterConfig, LogWriterName } from './log-writers';
 
 export * from './types';
-/**
- * Represents the foundation of a logger.
- */
+/** Represents the foundation of a logger. */
 export abstract class Logger {
   /**
    * Checks whether logging at the specified severity level is enabled.
