@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export type WriterConfig = {
+export type LogWriterConfig = {
   logLevel?: LogSeverity
 }
 export type ConsoleWriterConfig = {
@@ -9,6 +9,10 @@ export type ConsoleWriterConfig = {
 export type LogConfig = {
   writers: WriterConfig[];
 };
+
+export interface TestWriterConfig extends LogWriterConfig {
+
+}
 
 /**
  * Indicates level of log severity.
@@ -115,7 +119,7 @@ type LogWriter = {
    * Writes the log.
    * @param severity The severity of the log to write.
    * @param message The message of the log.
-   * @param optionalParams Optional parameters that are passed to util.format().
+   * @param optionalParams Optional parameters to log.
    */
   write(
     severity: LogSeverity,
