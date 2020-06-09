@@ -1,6 +1,22 @@
 {
-  "name": "comrade-angular-workspace",
-  "version": "0.0.0",
+  "name": "comrade-angular",
+  "version": "0.1.0",
+  "description": "Provides collection of Angular services and components.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kinwong/comrade-angular.git"
+  },
+  "keywords": [
+    "angular",
+    "logging"
+  ],
+  "author": "Kin Wong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kinwong/comrade-angular/issues"
+  },
+  "homepage": "https://github.com/kinwong/comrade-angular#readme",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
