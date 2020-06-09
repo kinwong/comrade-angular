@@ -50,6 +50,8 @@ class ConsoleLogWriter extends LogWriter {
     message: string,
     ...optionalParams: any[]
   ): void {
+    if (severity < this.minLevel) { return; }
+
     switch (severity) {
       case LogSeverity.Info:
         // tslint:disable-next-line: no-console
@@ -90,6 +92,7 @@ class StringArrayLogWriter extends LogWriter {
 
   /** @inheritdoc */
   public write(severity: LogSeverity, message: string, ...optionalParams: any[]): void {
+    if (severity < this.minLevel) { return; }
     let line = '[' + LogSeverity[severity].toUpperCase() + ']';
     if (!message) {
       line += ' ' + message;

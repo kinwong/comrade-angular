@@ -1,8 +1,14 @@
+import * as _ from 'lodash';
 import { Injectable } from '@angular/core';
 import { LogSeverity } from './types';
-import { LogWriterConfig, LogWriterName } from './log-writers';
+import { LogWriterConfig, LogWriterName, LogWriter, createLogWriter } from './log-writers';
 
 export * from './types';
+
+export interface LogFunc {
+  callback: (message: string, ...args: string[]) => string; // function property
+}
+
 /** Represents the foundation of a logger. */
 export abstract class Logger {
   /**
@@ -14,45 +20,45 @@ export abstract class Logger {
   /**
    * Logs the specified messages.
    * @param severity The servity level of the message.
-   * @param message The message to log.
-   * @param args The arguments.
+   * @param message A optional message to log.
+   * @param optionalParams An optional variable list of parameters.
    */
   public abstract log(
     severity: LogSeverity,
-    message: string,
-    ...args: object[]
+    message: string | undefined,
+    ...optionalParams: any[]
   ): void;
 
- public error(error: Error): void {
+  public error(message: string, ...optionalParams: any[]): void {
     if (!this.enabled(LogSeverity.Error)) {
       return;
     }
-    this.log(LogSeverity.Error, error.message);
+    this.log(LogSeverity.Error, message, optionalParams);
   }
-  public warn(message: string, error: Error): void {
+  public warn(message: string, ...optionalParams: any[]): void {
     if (!this.enabled(LogSeverity.Warn)) {
       return;
     }
-    this.log(LogSeverity.Warn, message);
+    this.log(LogSeverity.Warn, message, optionalParams);
   }
-  public info(message: string): void {
+  public info(message: string, ...optionalParams: any[]): void {
     if (!this.enabled(LogSeverity.Info)) {
       return;
     }
-    this.log(LogSeverity.Info, message);
+    this.log(LogSeverity.Info, message, optionalParams);
   }
-  public debug(message: string): void {
+  public debug(message: string, ...optionalParams: any[]): void {
     if (!this.enabled(LogSeverity.Debug)) {
       return;
     }
-    this.log(LogSeverity.Info, message);
+    this.log(LogSeverity.Debug, message, optionalParams);
   }
 }
 
 /** Represents the configuration of the log service. */
 export interface LogConfig {
   /** An array of log writer name and configuration. */
-  writers: [LogWriterName, LogWriterConfig][];
+  writers: { name: LogWriterName, config: LogWriterConfig }[];
 }
 
 /**
@@ -62,8 +68,15 @@ export interface LogConfig {
   providedIn: 'root',
 })
 export class LogService extends Logger {
-  constructor() {
+
+  constructor(config: LogConfig) {
     super();
+    this.writers = LogService.buildWriters(config);
+  }
+
+  private readonly writers: LogWriter[];
+  private static buildWriters(config: LogConfig): LogWriter[] {
+    return _.toArray(config?.writers.map(details => createLogWriter(details.name, details.config)));
   }
   /**
    * @inheritdoc
@@ -74,8 +87,15 @@ export class LogService extends Logger {
   /**
    * @inheritdoc
    */
-  public log(severity: LogSeverity, message: string, ...args: object[]): void {
-    throw new Error('Method not implemented.');
+  public log(severity: LogSeverity, message: string, ...optionalParams: any[]): void {
+    for (const writer of this.writers) {
+      try {
+        writer.write(severity, message, optionalParams);
+      }
+      catch (error) {
+        console.error(`Error caught while writing log with '${error.name}'.`, error);
+      }
+    }
   }
   /**
    * Creates a logger for the specified namespace.
@@ -85,4 +105,3 @@ export class LogService extends Logger {
     return null;
   }
 }
-

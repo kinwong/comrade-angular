@@ -55,7 +55,3 @@ export function fromSeverityToName(
       return 'debug';
   }
 }
-
-interface MessageFunc {
-  callback: (message: string, ...args: string[]) => string; // function property
-}
