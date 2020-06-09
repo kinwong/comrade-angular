@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 import { LogSeverity } from './types';
 import { LogWriterConfig, LogWriterName, LogWriter, createLogWriter } from './log-writers';
 
-export * from './types';
-
 export interface LogFunc {
   callback: (message: string, ...args: string[]) => string; // function property
 }

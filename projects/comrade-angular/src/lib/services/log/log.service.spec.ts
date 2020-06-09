@@ -50,26 +50,26 @@ describe('LogService', () => {
     expect(writer.lines.length).toEqual(4);
     expect(writer.lines[0]).toEqual(
       '[DEBUG]:This is debug message.-[{"number":12345,"string":"This is a string."},' +
-      '{"number":67890,"string":"This is another string."}]'
+        '{"number":67890,"string":"This is another string."}]'
     );
     expect(writer.lines[1]).toEqual(
       '[INFO]:This is info message.-[{"number":67890,"string":"This is another string."},' +
-      '{"number":12345,"string":"This is a string."}]'
+        '{"number":12345,"string":"This is a string."}]'
     );
     expect(writer.lines[2]).toEqual(
       '[WARN]:This is warning message.-[{"number":12345,"string":"This is a string."},' +
-      '{"number":67890,"string":"This is another string."}]'
+        '{"number":67890,"string":"This is another string."}]'
     );
     expect(writer.lines[3]).toEqual(
       '[ERROR]:This is error message.-[{"number":67890,"string":"This is another string."},' +
-      '{"number":12345,"string":"This is a string."}]'
+        '{"number":12345,"string":"This is a string."}]'
     );
   });
 
   it('should clear the log', () => {
     const count = 100;
     for (let i = 0; i < count; i++) {
-      service.info(`This is line ${i.toString()}`, {index: i});
+      service.info(`This is line ${i.toString()}`, { index: i });
     }
     const writer = service.writers[0] as StringArrayLogWriter;
     expect(writer.lines.length).toEqual(count);

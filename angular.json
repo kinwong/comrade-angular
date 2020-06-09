@@ -42,6 +42,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "comrade-angular"
 }

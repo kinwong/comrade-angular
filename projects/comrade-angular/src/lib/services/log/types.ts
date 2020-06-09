@@ -37,6 +37,7 @@ export function fromNameToSeverity(
       return defaultSeverity;
   }
 }
+
 /**
  * Converts from severity level to severity name.
  * @param severity The severity level to convert.

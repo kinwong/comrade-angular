@@ -1,5 +1,4 @@
-import { LogSeverity } from './log.service';
-import { LogSeverityName, fromNameToSeverity } from './types';
+import { LogSeverityName, fromNameToSeverity, LogSeverity } from './types';
 
 /** Represents supported writer names. */
 export type LogWriterName = 'console' | 'string-array';
