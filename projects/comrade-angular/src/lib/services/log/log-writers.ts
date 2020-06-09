@@ -110,13 +110,13 @@ export class StringArrayLogWriter extends LogWriter {
 
 /**
  * Creates a log writer from the specified log writer name and configuration.
- * @param configRow A tuple of log writer name and configuration.
+ * @param details Details include name and configuration of the log writer.
  */
-export function createLogWriter(
-  name: LogWriterName, config: LogWriterConfig): LogWriter {
+export function createLogWriter(details: {
+  name: LogWriterName, config: LogWriterConfig}): LogWriter {
     switch (name) {
-      case 'console': return ConsoleLogWriter.create(config);
-      case 'string-array': return StringArrayLogWriter.create(config);
+      case 'console': return ConsoleLogWriter.create(details.config);
+      case 'string-array': return StringArrayLogWriter.create(details.config);
       default:
         throw Error(`Unable to create log-writer with name '${name}'.`);
     }

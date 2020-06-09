@@ -73,7 +73,7 @@ export class LogService extends Logger {
   /** Gets the log writers associates with this log service. */
   public readonly writers: LogWriter[];
   private static buildWriters(config: LogConfig): LogWriter[] {
-    return _.toArray(config?.writers.map(details => createLogWriter(details.name, details.config)));
+    return _.toArray(config?.writers.map(createLogWriter));
   }
   /**
    * @inheritdoc
