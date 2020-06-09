@@ -7,18 +7,22 @@ import { LogService, LogConfig } from '../services/log/log.service';
   providers: [LogService],
 })
 export class LogModule {
-  static forRoot(
-    config: LogConfig | null | undefined
-  ): ModuleWithProviders<LogModule> {
+  public static forRoot(config: LogConfig | null | undefined): ModuleWithProviders<LogModule> {
     return {
       ngModule: LogModule,
-      providers: [{ provide: LogConfig, useValue: config || {} }, LogService],
+      providers: [
+        { provide: LogConfig, useValue: config || {} },
+        LogService
+      ]
     };
   }
   static forChild(): ModuleWithProviders<LogModule> {
     return {
       ngModule: LogModule,
-      providers: [LogService],
+      providers: [
+        LogService
+      ]
     };
   }
 }
+

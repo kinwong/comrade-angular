@@ -56,7 +56,7 @@ export abstract class Logger {
 }
 
 /** Represents the configuration of the log service. */
-export interface LogConfig {
+export class LogConfig {
   /** An array of log writer name and configuration. */
   writers: { name: LogWriterName, config: LogWriterConfig }[];
 }
@@ -68,13 +68,12 @@ export interface LogConfig {
   providedIn: 'root',
 })
 export class LogService extends Logger {
-
   constructor(config: LogConfig) {
     super();
     this.writers = LogService.buildWriters(config);
   }
-
-  private readonly writers: LogWriter[];
+  /** Gets the log writers associates with this log service. */
+  public readonly writers: LogWriter[];
   private static buildWriters(config: LogConfig): LogWriter[] {
     return _.toArray(config?.writers.map(details => createLogWriter(details.name, details.config)));
   }

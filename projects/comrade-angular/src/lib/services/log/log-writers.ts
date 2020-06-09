@@ -12,7 +12,8 @@ export type LogWriterConfig = {
 
 /** Represents the foundation of a log writer. */
 export abstract class LogWriter {
-  protected readonly minLevel: LogSeverity;
+  /** Gets the minimum level of severity to write. */
+  public readonly minLevel: LogSeverity;
 
   constructor(config: LogWriterConfig | undefined | null) {
     this.minLevel =  fromNameToSeverity(config?.minLevel, LogSeverity.Debug);
@@ -55,21 +56,21 @@ class ConsoleLogWriter extends LogWriter {
     switch (severity) {
       case LogSeverity.Info:
         // tslint:disable-next-line: no-console
-        console.info(message, optionalParams);
+        console.info(message, ...optionalParams);
         break;
 
       case LogSeverity.Warn:
-        console.warn(message, optionalParams);
+        console.warn(message, ...optionalParams);
         break;
 
       case LogSeverity.Error:
-        console.error(message, optionalParams);
+        console.error(message, ...optionalParams);
         break;
 
       case LogSeverity.Debug:
       default:
       // tslint:disable-next-line: no-console
-      console.debug(message, optionalParams);
+      console.debug(message, ...optionalParams);
       break;
     }
   }
@@ -79,9 +80,9 @@ class ConsoleLogWriter extends LogWriter {
 }
 
 /**
- * Logs to a array or strings.
+ * Writes logs as an array of strings.
  */
-class StringArrayLogWriter extends LogWriter {
+export class StringArrayLogWriter extends LogWriter {
   public lines: string[] = [];
   private constructor(config: LogWriterConfig) {
     super(config);
@@ -89,16 +90,16 @@ class StringArrayLogWriter extends LogWriter {
   public static create(config: LogWriterConfig): StringArrayLogWriter {
     return new StringArrayLogWriter(config);
   }
-
   /** @inheritdoc */
   public write(severity: LogSeverity, message: string, ...optionalParams: any[]): void {
     if (severity < this.minLevel) { return; }
     let line = '[' + LogSeverity[severity].toUpperCase() + ']';
-    if (!message) {
-      line += ' ' + message;
+    if (message) {
+      line += ':' + message;
     }
-    if (optionalParams && optionalParams.length > 0) {
-      line += ' ' + JSON.stringify(optionalParams);
+    const args = optionalParams[0][0];
+    if (args && args.length > 0) {
+      line += '-' + JSON.stringify(args);
     }
     this.lines.push(line);
   }
