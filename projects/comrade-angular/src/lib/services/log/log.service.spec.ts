@@ -29,6 +29,7 @@ describe('LogService', () => {
   });
   it('should be created', () => {
     expect(service).toBeTruthy();
+    expect(service.writers).toBeTruthy();
     expect(service.writers.length).toEqual(1);
     expect(service.writers[0]).toBeTruthy();
   });
