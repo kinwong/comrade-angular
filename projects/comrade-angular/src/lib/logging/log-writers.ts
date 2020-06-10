@@ -114,10 +114,10 @@ export class StringArrayLogWriter extends LogWriter {
  */
 export function createLogWriter(details: {
   name: LogWriterName, config: LogWriterConfig}): LogWriter {
-    switch (name) {
+    switch (details.name) {
       case 'console': return ConsoleLogWriter.create(details.config);
       case 'string-array': return StringArrayLogWriter.create(details.config);
       default:
-        throw Error(`Unable to create log-writer with name '${name}'.`);
+        throw Error(`Unable to create log-writer with name '${details.name}'.`);
     }
 }
