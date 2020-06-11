@@ -2,10 +2,10 @@
  * Public API Surface of comrade-angular
  */
 
-export * from './lib/modules/log.module';
-export * from './lib/services/log/types';
-export * from './lib/services/log/log.service';
-export * from './lib/services/log/log-writers';
+export * from './lib/logging/log.module';
+export * from './lib/logging/types';
+export * from './lib/logging/log.service';
+export * from './lib/logging/log-writers';
 
-export * from './lib/modules/auth.module';
-export * from './lib/services/auth/auth.service';
+export * from './lib/auth/auth.module';
+export * from './lib/auth/auth.service';

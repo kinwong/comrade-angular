@@ -1,6 +1,6 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LogService, LogConfig } from '../services/log/log.service';
+import { LogService, LogConfig } from './log.service';
 
 @NgModule({
   imports: [CommonModule],
